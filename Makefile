@@ -1,74 +1,70 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: enpassel <enpassel@student.42lyon.fr>      +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/12/28 20:37:12 by acesar-l          #+#    #+#              #
-#    Updated: 2024/12/06 15:05:54 by enpassel         ###   ########lyon.fr    #
-#                                                                              #
-# **************************************************************************** #
+NAME := so_long
 
-NAME			= so_long
+SRC:= $(addprefix $(SRC_DIR), ft_check_map.c ft_close_game.c ft_free.c ft_handle_input.c ft_init_vars.c ft_initialize_game.c ft_initialize_map.c ft_render_map.c ft_so_long.c utils.c)
+OBJ_DIR:= sources/.obj/
+OBJ:= $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
+DEPS:= $(OBJ:%.o=%.d)
 
-GREEN			= \033[0;32m
-RED					= \033[0;31m
-RESET			= \033[0m
+CC:= gcc
+CCFLAGS:= -Wextra -Wall -Werror -g3
+CPPFLAGS = -MMD -MP
+SRC_DIR:= sources/
+INCLUDES:= sources/
 
-LIBFT 			= ./Libft/libft.a
 
-MLX_DIR:= ./minilibx-linux/
+MLX_DIR:= minilibx-linux/
+MLX:= $(MLX_DIR)libmlx_Linux.a
+MLX_FLAG:= -L $(MLX_DIR) -lmlx_Linux -L/usr/lib -I $(MLX_DIR) -lX11 -lm -lz -lXext $(MLX)
 
-CC 				= gcc
+LIBFT_DIR := Libft/
+LIBFT := $(LIBFT_DIR)libft.a
+LIBFT_FLAG := -L $(LIBFT_DIR) $(LIBFT)
 
-STANDARD_FLAGS 	= -Wall -Werror -Wextra -g3
-MLX:= minilibx-linux/libmlx_Linux.a
-MINILIBX_FLAGS	= -L $(MLX_DIR) -lmlx_Linux -L/usr/lib -I $(MLX_DIR) -lX11 -lm -lz -lXext $(MLX)
+HEADERS:= -I $(INCLUDES) -I $(MLX_DIR) -I $(LIBFT_DIR)
 
-VALGRIND		= @valgrind --leak-check=full --show-leak-kinds=all \
---track-origins=yes --quiet --tool=memcheck --keep-debuginfo=yes
+all: $(NAME)
 
-REMOVE 			= rm -f
+$(NAME): $(OBJ)
+	$(MAKE) -C $(MLX_DIR)
+	$(MAKE) -C $(LIBFT_DIR)
+	$(CC) $(CCFLAGS) $(OBJ) $(MLX_FLAG) $(LIBFT_FLAG) -o $(NAME)
+	@echo "👉 $(BLUE)$(CC) $(CCFLAGS) $(OBJ)  $(MLX_FLAG) $(LIBFT_FLAG) -o $(NAME)$(DEF_COLOR) 👀👀👀"
+	@echo "$(GREEN) 💪💪💪💪💪💪👉 🦸🦸 $(NAME) compiled! 🦸🦸 💪💪💪💪💪💪 $(DEF_COLOR)"
+	
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+	@mkdir -p $(OBJ_DIR)
+	@echo "✅ $(MAGENTA)Compiling: $< $(DEF_COLOR) ✅"
+	$(CC) $(CCFLAGS) $(CPPFLAGS)  $(HEADERS) -o $@ -c $<
 
-SRCS_DIR		= ./sources/
+-include $(DEPS)
+# Colors
 
-SRCS 			= $(addprefix $(SRCS_DIR),\
-				ft_so_long.c			\
-				ft_init_vars.c		\
-				ft_initialize_game.c \
-				ft_initialize_map.c \
-				utils.c			\
-				ft_check_map.c \
-				ft_close_game.c \
-				ft_free.c \
-				ft_handle_input.c \
-				ft_render_map.c)
-				
-all:			${LIBFT} ${NAME}
+DEF_COLOR = \033[0;39m
+GRAY = \033[0;90m
+RED = \033[0;91m
+GREEN = \033[0;92m
+YELLOW = \033[0;93m
+BLUE = \033[0;94m
+MAGENTA = \033[0;95m
+CYAN = \033[0;96m
+WHITE = \033[0;97m
 
-${NAME}: 		
-				make -C $(MLX_DIR)
-				${CC} ${SRCS} ${LIBFT} ${STANDARD_FLAGS} ${MINILIBX_FLAGS} -o ${NAME}
-				@echo "$(NAME): $(GREEN)$(NAME) was compiled.$(RESET)"
-				@echo
 
-${LIBFT}:
-				@echo
-				make bonus -C Libft
+
 
 clean:
-				make clean -C Libft
-				@echo
+	rm -rf $(OBJ_DIR)
 
-fclean:
-				${REMOVE} ${NAME} 
-				@echo "${NAME}: ${RED}${NAME} and ${NAME_BONUS} were deleted${RESET}"
-				@echo
+fclean: clean
+	$(MAKE) fclean -C $(LIBFT_DIR)
+	$(MAKE) clean -C $(MLX_DIR)
+	@echo "$(RED)💩💩💩💩💩💩💩 $(NAME) removed! 💩💩💩💩💩💩💩$(DEF_COLOR)"
+	rm -f $(NAME)
 
-re:				fclean all
+re: fclean all
 
-run:			${NAME}
-				${VALGRIND} ./${NAME} assets/maps/map1.ber
+info:
+	@echo "OBJ": $(OBJ)
+	@echo "DEPS": $(DEPS)
 
-.PHONY:			all clean fclean re rebonus valgrind run
+.PHONY: all clean fclean re

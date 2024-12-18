@@ -6,13 +6,13 @@
 /*   By: enpassel <enpassel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 13:39:21 by enpassel          #+#    #+#             */
-/*   Updated: 2024/12/12 15:27:22 by enpassel         ###   ########lyon.fr   */
+/*   Updated: 2024/12/17 18:58:15 by enpassel         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_so_long.h"
 
-void	ft_free_all_allocated_memory(t_game *game)
+void	ft_free_all(t_game *game)
 {
 	ft_kill_image(game);
 	ft_free_map(game);

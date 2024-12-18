@@ -6,7 +6,7 @@
 /*   By: enpassel <enpassel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 11:18:16 by enpassel          #+#    #+#             */
-/*   Updated: 2024/12/12 16:14:03 by enpassel         ###   ########lyon.fr   */
+/*   Updated: 2024/12/17 18:58:15 by enpassel         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ int				ft_close_game(t_game *game);
 int				ft_error_msg(char *message, t_game *game);
 
 ///////FT_FREE////////
-void			ft_free_all_allocated_memory(t_game *game);
+void			ft_free_all(t_game *game);
 void			ft_kill_image(t_game *game);
 void			ft_free_map(t_game *game);
 

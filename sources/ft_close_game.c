@@ -6,7 +6,7 @@
 /*   By: enpassel <enpassel@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 14:27:32 by enpassel          #+#    #+#             */
-/*   Updated: 2024/12/12 14:33:16 by enpassel         ###   ########lyon.fr   */
+/*   Updated: 2024/12/17 18:58:15 by enpassel         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	ft_close_game(t_game *game)
 {
 	ft_printf("Movements: %d\n", game->movements);
-	ft_free_all_allocated_memory(game);
+	ft_free_all(game);
 	ft_printf("CLOSED\n");
 	exit(EXIT_FAILURE);
 }
